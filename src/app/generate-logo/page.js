@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState , Suspense} from "react";
 import { UserContext } from "../_context/UserContext";
 import Image from "next/image";
 import axios from "axios";
@@ -90,7 +90,8 @@ const GenerateLogo = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
+    <Suspense>
+      <div className="flex flex-col items-center justify-center min-h-screen p-4">
       {loading ? (
         <div className="flex flex-col justify-center items-center h-full">
           <Loader2Icon className="animate-spin text-blue-600 w-12 h-12" />
@@ -120,6 +121,7 @@ const GenerateLogo = () => {
         )
       )}
     </div>
+    </Suspense>
   );
 };
 
