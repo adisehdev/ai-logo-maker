@@ -23,7 +23,7 @@ const SearchParamsWrapper = ({ setType }) => {
 };
 
 const GenerateLogo = () => {
-  const { userInfo } = useContext(UserContext);
+  const { userInfo,setUserInfo } = useContext(UserContext);
   const [formData, setFormData] = useState();
   const [loading, setLoading] = useState(false);
   const [logoImg, setLogoImg] = useState();
@@ -63,6 +63,10 @@ const GenerateLogo = () => {
     if (type === "Premium" && userInfo?.credits <= 0) {
       toast("No credits left.");
       return;
+    }
+
+    else if(type === "Premium" && userInfo?.credits > 0){
+      setUserInfo({...userInfo,credits:parseInt(userInfo?.credits)-1})
     }
 
     const PROMPT = Prompt.LOGO_PROMPT.replace("{logoTitle}", formData?.title)
