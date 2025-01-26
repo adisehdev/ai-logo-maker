@@ -10,11 +10,7 @@ const Dashboard = () => {
     const router = useRouter()
     const {userInfo,setUserInfo} = useContext(UserContext)
 
-    useEffect(() => {
-        if(!userInfo){
-            router.push('/')
-        }
-    }, [userInfo])
+    
   return (
 
 
