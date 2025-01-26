@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { Suspense } from 'react'
 
 import { Button } from "@/components/ui/button";
 import LogoTitle from "./components/LogoTitle";
@@ -23,7 +24,8 @@ const CreateLogo = () => {
     localStorage.setItem('step',JSON.stringify(step))
   },[step])
   return (
-    <div className="mt-28 p-10 border rounded-xl 2xl:mx-65">
+    <Suspense>
+      <div className="mt-28 p-10 border rounded-xl 2xl:mx-65">
       {step === 1 ? (
         <LogoTitle handleInputChange={(value) => handleInputChange('title', value)} formData={formData}/>
       ) : step === 2 ? (
@@ -48,6 +50,7 @@ const CreateLogo = () => {
         {step!== 6 && <Button onClick={() => setStep(step + 1)}>Continue</Button>}
       </div>
     </div>
+    </Suspense>
   );
 };
 
