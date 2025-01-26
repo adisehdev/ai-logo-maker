@@ -1,4 +1,3 @@
-"use client"
 import React, { useState, useEffect } from 'react'
 import HeadingDesc from './HeadingDesc'
 import Lookup from '@/app/_data/Lookup'
