@@ -28,6 +28,7 @@ const GenerateLogo = () => {
   const [loading, setLoading] = useState(false);
   const [logoImg, setLogoImg] = useState();
   const [type, setType] = useState(null);
+  const [error,setError] = useState("")
   const router = useRouter();
 
   const downloadLogo = async () => {
@@ -58,6 +59,7 @@ const GenerateLogo = () => {
   }, [formData]);
 
   const generateAILogo = async () => {
+    setError("")
     if (type === "Premium" && userInfo?.credits <= 0) {
       toast("No credits left.");
       return;
@@ -86,10 +88,15 @@ const GenerateLogo = () => {
         setLogoImg(res?.data?.image);
       }
     } catch (error) {
+      setError("Error Generating Logo try later...")
       console.error("Error generating logo:", error);
     }
     setLoading(false);
   };
+
+  if(error)return <div className="flex items-center justify-center min-h-screen text-red-500 text-2xl font-bold">
+    <p>{error}</p>
+  </div>
 
   return (
     <Suspense fallback={<Loader2Icon className="animate-spin text-blue-600 w-12 h-12" />}>
