@@ -5,23 +5,26 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
+import { useUser } from '@clerk/nextjs'
 
 
 const Info = () => {
     const {userInfo,setUserInfo} = useContext(UserContext)
     const router = useRouter()
     
-
+    const user = useUser()
 
     
 
     useEffect(() => {
-        getUserInfo();
-      }, []);
+        if(user?.isSignedIn)getUserInfo();
+        else router.push('/')
+      }, [user]);
 
     const getUserInfo = async () => {
+        console.log("getting user info in dashboard");
         try {
-          const result = await axios.post(`/api/users/`, {
+          const result = await axios.post("/api/users/", {
             email: userInfo?.email,
             name : userInfo?.name
           });
