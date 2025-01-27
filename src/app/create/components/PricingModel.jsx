@@ -17,13 +17,21 @@ const PricingModel = ({ formData, handleInputChange }) => {
   const { user } = useUser();
 
   return (
-    <div className="my-10">
+    <div className="my-10 flex flex-col items-center">
       <HeadingDesc
         title={Lookup.LogoPricingModelTitle}
         description={Lookup.LogoPricingModelDesc}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-8">
+
+<div className="mt-8">
+        <Link href={`/generate-logo-test`}><Button className="font-bold w-full h-15">Try Without Signing Up</Button></Link>
+      </div>
+
+
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+      
         {Lookup.pricingOption.map((option, index) => (
           <div
             key={index}
@@ -58,6 +66,8 @@ const PricingModel = ({ formData, handleInputChange }) => {
           </div>
         ))}
       </div>
+
+      
     </div>
   );
 };

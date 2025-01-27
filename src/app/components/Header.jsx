@@ -56,13 +56,16 @@
 import React, { useContext } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { UserButton, useUser } from "@clerk/nextjs";
+import { SignInButton, SignOutButton, UserButton, useUser } from "@clerk/nextjs";
 import { UserContext } from "../_context/UserContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useClerk } from "@clerk/nextjs";
+
 
 const Header = () => {
-  const { isSignedIn, signOut } = useUser();
+  const { isSignedIn } = useUser();
+  const { signOut } = useClerk();
   const router = useRouter();
   const { setUserInfo } = useContext(UserContext);
 
@@ -74,7 +77,7 @@ const Header = () => {
     setUserInfo({});
 
     // Perform Clerk sign-out and redirect to home page
-    await signOut();
+    await signOut({redirectUrl : "/"});
     router.push("/");
   };
 
@@ -89,27 +92,24 @@ const Header = () => {
       <div className="flex items-center gap-3">
         {/* Conditional Navigation Based on Sign-In State */}
         {isSignedIn ? (
+          <div className="flex items-center gap-5">
           <Link href={"/dashboard"}>
             <Button mode="outline" className="font-bold">
               Dashboard
             </Button>
           </Link>
+          <Button className="font-bold" onClick={handleSignOut}>Sign Out</Button>
+          </div>
         ) : (
           <Link href={"/create"}>
             <Button className="font-bold">Get Started</Button>
           </Link>
         )}
 
-        {/* User Button with Custom Menu Items */}
-        <UserButton>
-          <UserButton.MenuItems>
-            <UserButton.Action label={"Manage Account"} />
-            <UserButton.Action 
-              label={"Sign Out"} 
-              onClick={() => handleSignOut()}
-            />
-          </UserButton.MenuItems>
-        </UserButton>
+        {/* User Button with Custom Menu Items
+        <UserButton/> */}
+
+       
       </div>
     </div>
   );

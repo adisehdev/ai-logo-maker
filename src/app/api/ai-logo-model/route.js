@@ -11,7 +11,7 @@
 //     //generate ai text prompt for logo
 //     const aiPromptRes = await AILogoPrompt.sendMessage(prompt);
 //     const finalPromt = JSON.parse(aiPromptRes.response.text()).prompt;
-    
+
 //     let base64ImgwithMime = ""
 //     //pass prompt to ai model
 //     //s1-> generate logo from ai model
@@ -27,14 +27,12 @@
 //               responseType: "arraybuffer",
 //             }
 //           );
-      
+
 //           //convert to base 64
 //           const buffer = Buffer.from(resp.data, "binary"); //convert to binary
 //           const base64Img = buffer.toString("base64"); //convert to base64
 //           base64ImgwithMime = `data:image/png;base64,${base64Img}`; //add mime type
 //     }
-
-
 
 //     else{
 //         const options = {
@@ -45,7 +43,7 @@
 //             },
 //             body: JSON.stringify({prompt: finalPromt})
 //           };
-          
+
 //           fetch('https://api.freepik.com/v1/ai/text-to-image', options)
 //             .then(response => response.json())
 //             .then(response => {console.log(response)
@@ -73,8 +71,6 @@
 //   }
 // };
 
-
-
 import { AILogoPrompt } from "@/app/configs/AiModel";
 import { NextResponse } from "next/server";
 import { db } from "@/app/configs/FirebaseConfig";
@@ -84,109 +80,153 @@ import axios from "axios";
 let globalCreditVar = 0;
 
 export const POST = async (req) => {
- try {
-   const { prompt, email, title, description, type, credits } = await req.json();
+  try {
+    const { prompt, email, title, description, type, credits } =
+      await req.json();
 
-   globalCreditVar = credits;
-   
-   // Generate AI text prompt for logo
-   const aiPromptRes = await AILogoPrompt.sendMessage(prompt);
-   const finalPrompt = JSON.parse(aiPromptRes.response.text()).prompt;
-   
-   // Generate logo based on service type
-   const base64ImgwithMime = await generateLogoImage(finalPrompt, type,email,credits);
-   
-   // Save logo to Firestore
-   await saveLogo(email, base64ImgwithMime, title, description);
-   
-   return NextResponse.json({ image: base64ImgwithMime });
- } catch (error) {
-   console.error("Logo generation error:", error);
-   return NextResponse.json({ 
-     error: error.message || "Failed to generate logo" 
-   }, { status: 500 });
- }
+    globalCreditVar = credits;
+
+    // Generate AI text prompt for logo
+    const aiPromptRes = await AILogoPrompt.sendMessage(prompt);
+    const finalPrompt = JSON.parse(aiPromptRes.response.text()).prompt;
+
+    // Generate logo based on service type
+    const base64ImgwithMime = await generateLogoImage(
+      finalPrompt,
+      type,
+      email,
+      credits
+    );
+
+    // Save logo to Firestore
+    if (type !== "Test")
+      await saveLogo(email, base64ImgwithMime, title, description);
+
+    return NextResponse.json({ image: base64ImgwithMime });
+  } catch (error) {
+    console.error("Logo generation error:", error);
+    return NextResponse.json(
+      {
+        error: error.message || "Failed to generate logo",
+      },
+      { status: 500 }
+    );
+  }
 };
 
 // Separate function for image generation
-async function generateLogoImage(prompt, type,email,credits) {
- if (type === "Free") {
-   return await generateFreeModelImage(prompt,email,credits);
- } else {
-   return await generatePremiumModelImage(prompt,email,credits);
- }
+async function generateLogoImage(prompt, type, email, credits) {
+  if (type === "Free") {
+    return await generateFreeModelImage(prompt, email, credits);
+  } else if (type === "Premium") {
+    return await generatePremiumModelImage(prompt, email, credits);
+  } else if (type === "Test") {
+    return await generateTestModelImage(prompt);
+  }
 }
 
 // Free model image generation
-async function generateFreeModelImage(prompt,email,credits) {
- try {
-   const resp = await axios.post(
-     "https://api-inference.huggingface.co/models/strangerzonehf/Flux-Midjourney-Mix2-LoRA",
-     prompt,
-     {
-       headers: {
-         Authorization: `Bearer ${process.env.HUGGINGFACE_TOKEN}`,
-         "Content-Type": "application/json",
-       },
-       responseType: "arraybuffer",
-     }
-   );
-   
-   const buffer = Buffer.from(resp.data, "binary");
-   return `data:image/png;base64,${buffer.toString("base64")}`;
- } catch (error) {
-   console.error("Free model image generation error:", error);
-   throw new Error("Failed to generate image with free model");
- }
+async function generateFreeModelImage(prompt, email, credits) {
+  try {
+    const resp = await axios.post(
+      "https://api-inference.huggingface.co/models/strangerzonehf/Flux-Midjourney-Mix2-LoRA",
+      prompt,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.HUGGINGFACE_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        responseType: "arraybuffer",
+      }
+    );
+
+    const buffer = Buffer.from(resp.data, "binary");
+    return `data:image/png;base64,${buffer.toString("base64")}`;
+  } catch (error) {
+    console.error("Free model image generation error:", error);
+    throw new Error("Failed to generate image with free model");
+  }
 }
 
 // Premium model image generation
-async function generatePremiumModelImage(prompt,email,credits) {
- try {
-    if(credits === 0){
+async function generatePremiumModelImage(prompt, email, credits) {
+  try {
+    if (credits === 0) {
       throw new Error("No credits left");
     }
 
+    const response = await fetch(
+      "https://api.freepik.com/v1/ai/text-to-image",
+      {
+        method: "POST",
+        headers: {
+          "x-freepik-api-key": process.env.FREEPIK_TOKEN,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      }
+    );
 
-   const response = await fetch('https://api.freepik.com/v1/ai/text-to-image', {
-     method: 'POST',
-     headers: {
-       'x-freepik-api-key': process.env.FREEPIK_TOKEN,
-       'Content-Type': 'application/json'
-     },
-     body: JSON.stringify({ prompt })
-   });
+    const data = await response.json();
+    const base64Img = data?.data[0]?.base64;
 
-   const data = await response.json();
-   const base64Img = data?.data[0]?.base64;
-   
-   if (!base64Img) {
-     throw new Error("No image generated by premium model");
-   }
-   
-   // Deduct 1 credit
-   const docRef = doc(db,"users",email);
-   await updateDoc(docRef, { credits: Number(credits) - 1 });
-   
-   return `data:image/png;base64,${base64Img}`;
- } catch (error) {
-   console.error("Premium model image generation error:", error);
-   throw new Error(error.message || "Failed to generate image with premium model");
- }
+    if (!base64Img) {
+      throw new Error("No image generated by premium model");
+    }
+
+    // Deduct 1 credit
+    const docRef = doc(db, "users", email);
+    await updateDoc(docRef, { credits: Number(credits) - 1 });
+
+    return `data:image/png;base64,${base64Img}`;
+  } catch (error) {
+    console.error("Premium model image generation error:", error);
+    throw new Error(
+      error.message || "Failed to generate image with premium model"
+    );
+  }
+}
+
+async function generateTestModelImage(prompt) {
+  try {
+    const response = await fetch(
+      "https://api.freepik.com/v1/ai/text-to-image",
+      {
+        method: "POST",
+        headers: {
+          "x-freepik-api-key": process.env.FREEPIK_TOKEN,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      }
+    );
+
+    const data = await response.json();
+    const base64Img = data?.data[0]?.base64;
+
+    if (!base64Img) {
+      throw new Error("No image generated by premium model");
+    }
+
+    return `data:image/png;base64,${base64Img}`;
+  } catch (error) {
+    console.error("Test model image generation error:", error);
+    throw new Error(
+      error.message || "Failed to generate image with test model"
+    );
+  }
 }
 
 // Save logo to Firestore
 async function saveLogo(email, image, title, description) {
- try {
-   await setDoc(doc(db, "users", email, "logos", Date.now().toString()), {
-     image,
-     title,
-     description
-   });
- } catch (error) {
-   console.error("Firestore save error:", error);
-   throw new Error("Failed to save logo to database");
- }
+  try {
+    await setDoc(doc(db, "users", email, "logos", Date.now().toString()), {
+      image,
+      title,
+      description,
+    });
+  } catch (error) {
+    console.error("Firestore save error:", error);
+    throw new Error("Failed to save logo to database");
+  }
 }
-
-
