@@ -54,25 +54,22 @@ const GenerateLogo = () => {
     console.log("user info generate logo",userInfo)
 
     
-    const storage = localStorage.getItem("formData");
+    
     
 
     
 
 
-    if(storage){
-      if(userInfo?.email){
+    
+      if(typeof window !== "undefined" && userInfo?.email){
+        const storage = localStorage.getItem("formData");
         setFormData(JSON.parse(storage));
       }
 
-      else{
-        console.log("storage exists but user dnt : generate-logo")
-      }
-    }
+      
+    
 
-    else{ //if no form data in ls
-      router.push('/')
-    }
+    
 
     // else if(!userInfo){
     //   console.log("sign out generate logo page")
