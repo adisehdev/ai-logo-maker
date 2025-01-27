@@ -8,7 +8,7 @@ import { UserContext } from "./_context/UserContext";
 const Provider = ({ children }) => {
   //save user data as all components are rendered inside it
 
-  const { user } = useUser();
+  const  user  = useUser();
 
   const [userInfo, setUserInfo] = useState();
   const [credits, setCredits] = useState();
@@ -16,9 +16,9 @@ const Provider = ({ children }) => {
   console.log("user from clerk", user);
 
   useEffect(() => {
-    if (user?.fullName) {
+    if (user?.isSignedIn === true) {
       checkUserAuth();
-    } else {
+    } else if(user?.isSignedIn === false){
       setUserInfo({});
 
       const formData = localStorage.getItem("formData");
