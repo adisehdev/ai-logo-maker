@@ -11,6 +11,7 @@ const Provider = ({ children }) => {
   const { user } = useUser();
 
   const [userInfo,setUserInfo] = useState()
+  const [credits,setCredits] = useState()
 
   console.log("user from clerk",user)
 
@@ -37,6 +38,7 @@ const Provider = ({ children }) => {
       } else {
         console.log("user is : ", result?.data);
         setUserInfo(result?.data)
+        setCredits(result?.data?.credits)
 
       }
     } catch (error) {
@@ -45,7 +47,7 @@ const Provider = ({ children }) => {
   };
   return (
     <div>
-      <UserContext value={{userInfo,setUserInfo}}>
+      <UserContext value={{userInfo,setUserInfo,credits,setCredits}}>
         <Header />
         <div className="px-10 lg:px-32 xl:px-48 2xl:px-56">{children}</div>
       </UserContext>

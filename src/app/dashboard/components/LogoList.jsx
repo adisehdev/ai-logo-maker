@@ -12,12 +12,14 @@ const LogoList = () => {
   const { userInfo } = useContext(UserContext);
   const [logos, setLogos] = useState([]);
   const [selectedLogo, setSelectedLogo] = useState(null); // For modal
+  const [loading,setLoading] = useState(false)
 
   useEffect(() => {
     userInfo?.email && getUserLogos();
   }, [userInfo]);
 
   const getUserLogos = async () => {
+    setLoading(true)
     const querySnapshot = await getDocs(
       collection(db, "users", userInfo?.email, "logos")
     );
@@ -25,6 +27,7 @@ const LogoList = () => {
       
       setLogos((prev) => [...prev, doc.data()]);
     });
+    setLoading(false)
   };
 
   const openModal = (logo) => {
@@ -34,6 +37,17 @@ const LogoList = () => {
   const closeModal = () => {
     setSelectedLogo(null);
   };
+
+
+  if(loading){
+    return (
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
+                  {[1, 2, 3, 4, 5, 6].map((_, index) => <div key={index} className="bg-slate-100 animate-pulse rounded-xl width-full h-[200px]"></div>)}
+
+      </div>
+
+    )
+  }
 
 
   if(logos.length === 0){

@@ -25,7 +25,7 @@ const SearchParamsWrapper = ({ setType }) => {
 };
 
 const GenerateLogo = () => {
-  const { userInfo,setUserInfo } = useContext(UserContext);
+  const { userInfo,setUserInfo,credits,setCredits} = useContext(UserContext);
   const [formData, setFormData] = useState();
   const [loading, setLoading] = useState(false);
   const [logoImg, setLogoImg] = useState();
@@ -62,7 +62,7 @@ const GenerateLogo = () => {
 
   const generateAILogo = async () => {
     setError("")
-    if (type === "Premium" && userInfo?.credits <= 0) {
+    if (type === "Premium" && credits <= 0) {
       toast("No credits left.");
       
       return (<div className="flex items-center justify-center min-h-screen">
@@ -92,12 +92,15 @@ const GenerateLogo = () => {
         title: formData?.title,
         description: formData?.description,
         type: type,
-        credits: userInfo?.credits,
+        credits: credits,
       });
       if (res?.data?.error) {
         console.error("Error from huggingface API", res?.data?.error);
       } else {
         setLogoImg(res?.data?.image);
+        if (type === "Premium") {
+          setCredits(parseInt(credits) - 1);
+        }
         
       }
     } catch (error) {

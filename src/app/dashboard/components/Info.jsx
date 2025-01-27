@@ -9,9 +9,11 @@ import { useUser } from '@clerk/nextjs'
 
 
 const Info = () => {
-    const {userInfo,setUserInfo} = useContext(UserContext)
+    const {userInfo,setUserInfo,credits,setCredits} = useContext(UserContext)
     const [currCredits,setCurrentCredits] = useState(parseInt(userInfo?.credits))
     const router = useRouter()
+
+    const user = useUser()
     
     
 
@@ -28,7 +30,8 @@ const Info = () => {
         try {
             const res = await axios.post("/api/users",{userEmail:userInfo?.email,
                 userName : userInfo?.name})
-            setCurrentCredits(res?.data?.credits)
+            setCredits(res?.data?.credits)
+            
             
         } catch (error) {
             console.log("erorr in dashboard getting users",error);
@@ -46,7 +49,7 @@ const Info = () => {
             <div className='flex gap-2 items-center'>
                 <Image src={'/coin.png'} width={40} height={40} alt='coin-img'/>
                 <div>
-                    <h2 className='text-2xl font-bold'>Credits Left : {currCredits}</h2>
+                    <h2 className='text-2xl font-bold'>Credits Left : {credits}</h2>
                 </div>
             </div>
         </div>
