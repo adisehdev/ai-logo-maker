@@ -25,8 +25,8 @@ const Info = () => {
         console.log("getting user info in dashboard");
         try {
           const result = await axios.post("/api/users/", {
-            email: userInfo?.email,
-            name : userInfo?.name
+            userEmail: userInfo?.email,
+            userName : userInfo?.name
           });
           if (result?.data?.error) {
             throw new Error(result?.data?.error);
@@ -35,7 +35,7 @@ const Info = () => {
           }
         } catch (error) {
           //console.log("could not get user info in dashboard");
-          console.log(error);
+          console.log("error in get user info dashboard",error);
         }
       };
 
