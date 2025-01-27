@@ -20,6 +20,7 @@ const LogoList = () => {
       collection(db, "users", userInfo?.email, "logos")
     );
     querySnapshot.forEach((doc) => {
+      
       setLogos((prev) => [...prev, doc.data()]);
     });
   };

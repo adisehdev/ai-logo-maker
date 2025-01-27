@@ -1,14 +1,16 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
-const isProtectedRoute = createRouteMatcher(['/dashboard(.*)','/generate-logo(.*)','/api/ai-logo-model(.*)'])
+const isProtectedRoute = createRouteMatcher(['/dashboard(.*)', '/generate-logo(.*)'])
+//const isProtectedRoute = createRouteMatcher([])
 
 export default clerkMiddleware(async (auth, req) => {
   const { userId, redirectToSignIn } = await auth()
-  if (!userId && isProtectedRoute(req)) {
-    // Add custom logic to run before redirecting
-    console.log("unauthorized")
-    return redirectToSignIn()
-  }
+  if (isProtectedRoute(req)) await auth.protect()
+    if (!userId && isProtectedRoute(req)) {
+      // Add custom logic to run before redirecting
+  
+      return redirectToSignIn()
+    }
 })
 
 export const config = {
@@ -18,4 +20,4 @@ export const config = {
     // Always run for API routes
     '/(api|trpc)(.*)',
   ],
-};
+}

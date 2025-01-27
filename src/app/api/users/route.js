@@ -30,3 +30,24 @@ export const POST = async (req) => {
     return NextResponse.json({ error: error.message });
   }
 };
+
+
+export const GET = async (req) => {
+  const searchParams = req.nextUrl.searchParams;
+  const email = searchParams.get("email")
+
+  try {
+    const docRef = doc(db, "users", email);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      //console.log("Document data:", docSnap.data());
+      return NextResponse.json(docSnap.data())
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+      throw new Error("No such document!");
+    }
+  } catch (error) {
+    return NextResponse.json({ error: error.message });
+  }
+}

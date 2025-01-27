@@ -22,7 +22,7 @@ const Header = () => {
         <div className='flex items-center gap-3'>
         {user.isSignedIn ? <Link href={'/dashboard'}><Button mode='outline' className='font-bold' >Dashboard</Button></Link> : <Link href={'/create'}><Button className='font-bold'>Get Started</Button></Link>}
         
-        <UserButton/>
+        <UserButton afterSignOutUrl={'/'}/>
         </div>
         
     </div>

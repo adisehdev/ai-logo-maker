@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState, Suspense } from "react";
+import React, { useContext, useEffect, useState,useCallback, Suspense } from "react";
 import { UserContext } from "../_context/UserContext";
 import Image from "next/image";
 import axios from "axios";
@@ -10,6 +10,8 @@ import { Loader2Icon } from "lucide-react";
 import { saveAs } from "file-saver";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import Link from "next/link";
+
 
 const SearchParamsWrapper = ({ setType }) => {
   const useParams = useSearchParams();
@@ -62,12 +64,18 @@ const GenerateLogo = () => {
     setError("")
     if (type === "Premium" && userInfo?.credits <= 0) {
       toast("No credits left.");
-      return;
+      
+      return (<div className="flex items-center justify-center min-h-screen">
+        <Link href={"/"}><Button className="font-bold">Return Home</Button></Link>
+      </div>);
     }
 
-    else if(type === "Premium" && userInfo?.credits > 0){
-      setUserInfo({...userInfo,credits:parseInt(userInfo?.credits)-1})
-    }
+    
+
+
+    console.log("generate logo function called");
+
+
 
     const PROMPT = Prompt.LOGO_PROMPT.replace("{logoTitle}", formData?.title)
       .replace("{logoDesc}", formData?.description)
@@ -90,6 +98,7 @@ const GenerateLogo = () => {
         console.error("Error from huggingface API", res?.data?.error);
       } else {
         setLogoImg(res?.data?.image);
+        
       }
     } catch (error) {
       setError("Error Generating Logo try later...")

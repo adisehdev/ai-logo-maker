@@ -1,11 +1,20 @@
 import { UserContext } from '@/app/_context/UserContext'
 import Image from 'next/image'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+
 
 const Info = () => {
     const {userInfo,setUserInfo} = useContext(UserContext)
+    const router = useRouter()
+    
+
+
+    console.log("user dashboard",userInfo)
+
+   
 
 
 
