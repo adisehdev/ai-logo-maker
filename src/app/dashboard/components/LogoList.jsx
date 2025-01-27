@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { UserContext } from "@/app/_context/UserContext";
 import { collection, getDocs } from "firebase/firestore";
 import Image from "next/image";
+import Link from "next/link";
 
 const LogoList = () => {
   const { userInfo } = useContext(UserContext);
@@ -32,6 +33,18 @@ const LogoList = () => {
   const closeModal = () => {
     setSelectedLogo(null);
   };
+
+
+  if(logos.length === 0){
+    return (
+      <div className="flex flex-col items-center min-h-screenmt-10">
+        <h2 className="text-2xl font-bold text-center">No logos found, Create New Logos</h2>
+        <Link href="/create">
+        <Button className="mt-5 font-bold">Create Logos</Button>
+        </Link>
+      </div>
+    )
+  }
 
   return (
     <div className="mt-10">
