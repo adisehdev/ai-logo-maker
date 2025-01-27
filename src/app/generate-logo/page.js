@@ -55,7 +55,8 @@ const GenerateLogo = () => {
       }
     }
 
-    else if(userInfo?.email){
+    else if(!userInfo?.email){
+      console.log("user not logged in inisde generate logo");
       router.push("/")
     }
   }, [userInfo]);
