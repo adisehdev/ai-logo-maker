@@ -9,6 +9,7 @@ const Provider = ({ children }) => {
   //save user data as all components are rendered inside it
 
   const  user  = useUser();
+  const banda = user.user
 
   const [userInfo, setUserInfo] = useState();
   const [credits, setCredits] = useState();
@@ -24,7 +25,7 @@ const Provider = ({ children }) => {
       const formData = localStorage.getItem("formData");
       console.log("formData inside provider  : no user", formData);
     }
-  }, [user]);
+  }, [banda]);
 
   const checkUserAuth = async () => {
     //save user to DB
