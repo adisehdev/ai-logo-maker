@@ -81,8 +81,9 @@ const Provider = ({ children }) => {
       checkUserAuth();
     } else {
       setUserInfo({});
-      const formData = localStorage.getItem("formData");
-      console.log("formData inside provider  : no user", formData);
+      localStorage.removeItem("formData");
+
+      console.log("removing form data : provider");
     }
   }, [isSignedIn]); // Only depend on isSignedIn
 
