@@ -21,7 +21,8 @@ const Provider = ({ children }) => {
     } else {
       setUserInfo({});
 
-      localStorage.removeItem("formData");
+      const formData = localStorage.getItem("formData");
+      console.log("formData inside provider  : no user", formData);
     }
   }, [user]);
 
