@@ -4,6 +4,7 @@ import React, { useContext, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import axios from 'axios'
 
 
 const Info = () => {
