@@ -5,6 +5,7 @@ import Info from './components/Info'
 import { useRouter } from 'next/navigation'
 import { useContext } from 'react'
 import { UserContext } from '../_context/UserContext'
+import axios from 'axios'
 
 const Dashboard = () => {
     const router = useRouter()

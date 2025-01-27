@@ -14,6 +14,27 @@ const Info = () => {
 
     console.log("user dashboard",userInfo)
 
+    useEffect(() => {
+        getUserInfo();
+      }, []);
+
+    const getUserInfo = async () => {
+        try {
+          const result = await axios.post(`/api/users/`, {
+            email: userInfo?.email,
+            name : userInfo?.name
+          });
+          if (result?.data?.error) {
+            throw new Error(result?.data?.error);
+          } else {
+            setUserInfo(result?.data);
+          }
+        } catch (error) {
+          console.log("could not get user info in dashboard");
+          console.log(error);
+        }
+      };
+
    
 
 
