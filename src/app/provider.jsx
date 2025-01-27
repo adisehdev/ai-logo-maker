@@ -5,25 +5,24 @@ import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { UserContext } from "./_context/UserContext";
 
-
 const Provider = ({ children }) => {
   //save user data as all components are rendered inside it
 
   const { user } = useUser();
-  
 
-  const [userInfo,setUserInfo] = useState()
-  const [credits,setCredits] = useState()
+  const [userInfo, setUserInfo] = useState();
+  const [credits, setCredits] = useState();
 
-  console.log("user from clerk",user)
+  console.log("user from clerk", user);
 
   useEffect(() => {
-    if(user?.fullName)checkUserAuth();
-    else {setUserInfo({})
+    if (user?.fullName) {
+      checkUserAuth();
+    } else {
+      setUserInfo({});
 
-    
-  
-  }
+      localStorage.removeItem("formData");
+    }
   }, [user]);
 
   const checkUserAuth = async () => {
@@ -43,9 +42,8 @@ const Provider = ({ children }) => {
         throw new Error(result?.data?.error);
       } else {
         console.log("user is : ", result?.data);
-        setUserInfo(result?.data)
-        setCredits(result?.data?.credits)
-
+        setUserInfo(result?.data);
+        setCredits(result?.data?.credits);
       }
     } catch (error) {
       console.log("error is : ", error);
@@ -53,7 +51,7 @@ const Provider = ({ children }) => {
   };
   return (
     <div>
-      <UserContext value={{userInfo,setUserInfo,credits,setCredits}}>
+      <UserContext value={{ userInfo, setUserInfo, credits, setCredits }}>
         <Header />
         <div className="px-10 lg:px-32 xl:px-48 2xl:px-56">{children}</div>
       </UserContext>

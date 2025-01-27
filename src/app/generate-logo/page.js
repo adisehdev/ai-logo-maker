@@ -33,6 +33,9 @@ const GenerateLogo = () => {
   const [error,setError] = useState("")
   const router = useRouter();
 
+
+  console.log("user info generate logo - outside",userInfo)
+
   const downloadLogo = async () => {
     if (!logoImg) return;
 
@@ -59,10 +62,17 @@ const GenerateLogo = () => {
       }
     }
 
+    // else if(!userInfo){
+    //   console.log("sign out generate logo page")
+    //   router.push('/')
+    // }
+
     
 
     
   }, [userInfo]);
+
+  
 
   useEffect(() => {
     if (formData?.title) {
