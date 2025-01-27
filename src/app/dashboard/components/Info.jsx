@@ -13,7 +13,7 @@ const Info = () => {
     
 
 
-    console.log("user dashboard",userInfo)
+    
 
     useEffect(() => {
         getUserInfo();
@@ -31,7 +31,7 @@ const Info = () => {
             setUserInfo(result?.data);
           }
         } catch (error) {
-          console.log("could not get user info in dashboard");
+          //console.log("could not get user info in dashboard");
           console.log(error);
         }
       };
