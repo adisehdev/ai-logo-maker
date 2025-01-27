@@ -5,10 +5,12 @@ import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { UserContext } from "./_context/UserContext";
 
+
 const Provider = ({ children }) => {
   //save user data as all components are rendered inside it
 
   const { user } = useUser();
+  
 
   const [userInfo,setUserInfo] = useState()
   const [credits,setCredits] = useState()
@@ -17,7 +19,11 @@ const Provider = ({ children }) => {
 
   useEffect(() => {
     if(user?.fullName)checkUserAuth();
-    else setUserInfo({})
+    else {setUserInfo({})
+
+    
+  
+  }
   }, [user]);
 
   const checkUserAuth = async () => {

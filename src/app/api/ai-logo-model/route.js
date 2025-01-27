@@ -121,7 +121,7 @@ async function generateLogoImage(prompt, type,email,credits) {
 async function generateFreeModelImage(prompt,email,credits) {
  try {
    const resp = await axios.post(
-     "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell",
+     "https://api-inference.huggingface.co/models/strangerzonehf/Flux-Midjourney-Mix2-LoRA",
      prompt,
      {
        headers: {
