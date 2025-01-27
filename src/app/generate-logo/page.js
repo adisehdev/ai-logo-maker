@@ -46,14 +46,17 @@ const GenerateLogo = () => {
   };
 
   useEffect(() => {
-    if(!userInfo?.email){
-      router.push("/")}
+    
 
     if (typeof window !== "undefined" && userInfo?.email) {
       const storage = localStorage.getItem("formData");
       if (storage) {
         setFormData(JSON.parse(storage));
       }
+    }
+
+    else if(userInfo?.email){
+      router.push("/")
     }
   }, [userInfo]);
 
