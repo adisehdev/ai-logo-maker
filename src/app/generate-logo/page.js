@@ -46,6 +46,8 @@ const GenerateLogo = () => {
   };
 
   useEffect(() => {
+
+    console.log("user info generate logo",userInfo)
     
 
     if (typeof window !== "undefined" && userInfo?.email) {
@@ -55,10 +57,7 @@ const GenerateLogo = () => {
       }
     }
 
-    else if(!userInfo?.email){
-      console.log("user not logged in inisde generate logo");
-      router.push("/")
-    }
+    
   }, [userInfo]);
 
   useEffect(() => {
