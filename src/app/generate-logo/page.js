@@ -48,6 +48,8 @@ const GenerateLogo = () => {
   useEffect(() => {
 
     console.log("user info generate logo",userInfo)
+
+    
     
 
     if (typeof window !== "undefined" && userInfo?.email) {
@@ -56,6 +58,8 @@ const GenerateLogo = () => {
         setFormData(JSON.parse(storage));
       }
     }
+
+    
 
     
   }, [userInfo]);
