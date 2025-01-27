@@ -12,10 +12,11 @@ const Provider = ({ children }) => {
 
   const [userInfo,setUserInfo] = useState()
 
-  //console.log("user from clerk",user)
+  console.log("user from clerk",user)
 
   useEffect(() => {
-    user && checkUserAuth();
+    if(user?.fullName)checkUserAuth();
+    else setUserInfo({})
   }, [user]);
 
   const checkUserAuth = async () => {

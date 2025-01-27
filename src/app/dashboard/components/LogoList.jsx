@@ -41,7 +41,7 @@ const LogoList = () => {
       <div className="flex flex-col items-center min-h-screenmt-10">
         <h2 className="text-2xl font-bold text-center">No logos found, Create New Logos</h2>
         <Link href="/create">
-        <Button className="mt-5 font-bold">Create Logos</Button>
+        
         </Link>
       </div>
     )

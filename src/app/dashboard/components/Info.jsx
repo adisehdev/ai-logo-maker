@@ -1,6 +1,6 @@
 import { UserContext } from '@/app/_context/UserContext'
 import Image from 'next/image'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useState,useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -10,34 +10,30 @@ import { useUser } from '@clerk/nextjs'
 
 const Info = () => {
     const {userInfo,setUserInfo} = useContext(UserContext)
+    const [currCredits,setCurrentCredits] = useState(parseInt(userInfo?.credits))
     const router = useRouter()
     
-    const user = useUser()
-
     
 
+    console.log("user info dashboard",userInfo)
+
     useEffect(() => {
-        if(user?.isSignedIn)getUserInfo();
-        else router.push('/')
-      }, [user]);
+        if(!userInfo?.email) router.push('/')
+            else{
+                getUserInfo()
+        }
+    },[userInfo])
 
     const getUserInfo = async () => {
-        console.log("getting user info in dashboard");
         try {
-          const result = await axios.post("/api/users/", {
-            userEmail: userInfo?.email,
-            userName : userInfo?.name
-          });
-          if (result?.data?.error) {
-            throw new Error(result?.data?.error);
-          } else {
-            setUserInfo(result?.data);
-          }
+            const res = await axios.post("/api/users",{userEmail:userInfo?.email,
+                userName : userInfo?.name})
+            setCurrentCredits(res?.data?.credits)
+            
         } catch (error) {
-          //console.log("could not get user info in dashboard");
-          console.log("error in get user info dashboard",error);
+            console.log("erorr in dashboard getting users",error);
         }
-      };
+    }
 
    
 
@@ -50,7 +46,7 @@ const Info = () => {
             <div className='flex gap-2 items-center'>
                 <Image src={'/coin.png'} width={40} height={40} alt='coin-img'/>
                 <div>
-                    <h2 className='text-2xl font-bold'>Credits Left : {userInfo?.credits}</h2>
+                    <h2 className='text-2xl font-bold'>Credits Left : {currCredits}</h2>
                 </div>
             </div>
         </div>

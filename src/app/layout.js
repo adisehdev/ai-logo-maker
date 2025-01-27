@@ -27,7 +27,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider afterSignOutUrl="/">
+    <ClerkProvider afterSignOutUrl="/" allowedRedirectOrigins={"/"}>
       <html lang="en">
         <body className={`${hostGrotesk.variable}`}>
           <Provider>{children}</Provider>
