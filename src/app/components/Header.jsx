@@ -75,7 +75,6 @@ const Header = () => {
     // Clear local storage and user context
     localStorage.removeItem("formData");
     setUserInfo({});
-
     // Perform Clerk sign-out and redirect to home page
     await signOut({redirectUrl : "/"});
     router.push("/");
