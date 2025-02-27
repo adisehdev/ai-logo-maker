@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Lookup from '../_data/Lookup'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -8,6 +8,12 @@ import Image from 'next/image'
 const Hero = () => {
     const [logoTitle,setLogoTitle] = useState('')
     const sampleImages = ['/sample_1.png','/sample_2.png','/sample_3.png','/sample_4.png','/sample_5.png','/sample_6.png']
+    useEffect(() => { //clear any previous formData
+        if(typeof window !== 'undefined') {localStorage.removeItem('formData');
+            localStorage.removeItem('step');
+        }
+        
+    },[])
   return (
 
     <div className='flex flex-col items-center mt-24 gap-5'>
