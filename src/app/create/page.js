@@ -12,7 +12,13 @@ import PricingModel from "./components/PricingModel";
 
 const CreateLogo = () => {
   
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(() => {
+     
+      const storedStep = localStorage.getItem("step");
+      return storedStep ? JSON.parse(storedStep) : 1;
+    
+    
+  });
   const [formData, setFormData] = useState();
 
   const handleInputChange = (field, value) => {
@@ -20,6 +26,7 @@ const CreateLogo = () => {
     console.log("formData ",formData);
   };
 
+  
   useEffect(() => {
     localStorage.setItem('step',JSON.stringify(step))
   },[step])
