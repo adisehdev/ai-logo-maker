@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Suspense } from 'react'
+import { Suspense } from "react";
 
 import { Button } from "@/components/ui/button";
 import LogoTitle from "./components/LogoTitle";
@@ -11,46 +11,88 @@ import LogoIdea from "./components/LogoIdea";
 import PricingModel from "./components/PricingModel";
 
 const CreateLogo = () => {
-  
-  const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState();
+  const [step, setStep] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("step")
+        ? JSON.parse(localStorage.getItem("step"))
+        : 1;
+    }
+    return 1;
+  });
+  const [formData, setFormData] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("formData")
+        ? JSON.parse(localStorage.getItem("formData"))
+        : {};
+    }
+    return {};
+  });
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    console.log("formData ",formData);
+    let prevFormData = {};
+    if (typeof window !== "undefined") {
+      prevFormData = localStorage.getItem("formData")
+        ? JSON.parse(localStorage.getItem("formData"))
+        : {};
+    }
+    localStorage.setItem(
+      "formData",
+      JSON.stringify({ ...prevFormData, [field]: value })
+    );
+    console.log("formData ", formData);
   };
 
-  
   useEffect(() => {
-    localStorage.setItem('step',JSON.stringify(step))
-  },[step])
+    localStorage.setItem("step", JSON.stringify(step));
+  }, [step]);
   return (
     <Suspense>
       <div className="mt-28 p-10 border rounded-xl 2xl:mx-65">
-      {step === 1 ? (
-        <LogoTitle handleInputChange={(value) => handleInputChange('title', value)} formData={formData}/>
-      ) : step === 2 ? (
-        <LogoDesc handleInputChange={(value) => handleInputChange('description', value)} formData={formData}/>
-      ) : step === 3 ? (
-        <LogoColorPallette handleInputChange={(value) => handleInputChange('palette', value)} formData={formData}/>
-      ) : step === 4 ? (
-        <LogoDesigns handleInputChange={(value) => handleInputChange('design', value)} formData={formData}/>
-      ) : step === 5 ? (
-        <LogoIdea handleInputChange={(value) => handleInputChange('idea', value)} formData={formData}/>
-      ) : 
-      step === 6 ? (
-        <PricingModel handleInputChange={(value) => handleInputChange('pricing', value)} formData={formData}/>
-      ) : 
-      null}
-      <div className="flex items-center justify-between">
-        {step !== 1 && (
-          <Button variant="outline" onClick={() => setStep(step - 1)}>
-            Previous
-          </Button>
-        )}
-        {step!== 6 && <Button onClick={() => setStep(step + 1)}>Continue</Button>}
+        {step === 1 ? (
+          <LogoTitle
+            handleInputChange={(value) => handleInputChange("title", value)}
+            formData={formData}
+          />
+        ) : step === 2 ? (
+          <LogoDesc
+            handleInputChange={(value) =>
+              handleInputChange("description", value)
+            }
+            formData={formData}
+          />
+        ) : step === 3 ? (
+          <LogoColorPallette
+            handleInputChange={(value) => handleInputChange("palette", value)}
+            formData={formData}
+          />
+        ) : step === 4 ? (
+          <LogoDesigns
+            handleInputChange={(value) => handleInputChange("design", value)}
+            formData={formData}
+          />
+        ) : step === 5 ? (
+          <LogoIdea
+            handleInputChange={(value) => handleInputChange("idea", value)}
+            formData={formData}
+          />
+        ) : step === 6 ? (
+          <PricingModel
+            handleInputChange={(value) => handleInputChange("pricing", value)}
+            formData={formData}
+          />
+        ) : null}
+        <div className="flex items-center justify-between">
+          {step !== 1 && (
+            <Button variant="outline" onClick={() => setStep(step - 1)}>
+              Previous
+            </Button>
+          )}
+          {step !== 6 && (
+            <Button onClick={() => setStep(step + 1)}>Continue</Button>
+          )}
+        </div>
       </div>
-    </div>
     </Suspense>
   );
 };
