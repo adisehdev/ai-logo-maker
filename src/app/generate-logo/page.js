@@ -10,7 +10,6 @@ import { Loader2Icon } from "lucide-react";
 import { saveAs } from "file-saver";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-
 import Link from "next/link";
 
 
@@ -71,10 +70,10 @@ const GenerateLogo = () => {
 
     
 
-    // else if(!userInfo){
-    //   console.log("sign out generate logo page")
-    //   router.push('/')
-    // }
+    else if(!userInfo || !userInfo?.email || Object.keys(userInfo).length === 0){
+      console.log("sign out generate logo page")
+      router.push('/')
+    }
 
     
 
