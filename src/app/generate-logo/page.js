@@ -87,10 +87,7 @@ const GenerateLogo = () => {
       generateAILogo();
     }
 
-    else if(!userInfo || !userInfo?.email || Object.keys(userInfo).length === 0){
-      console.log("sign out generate logo page")
-      router.push('/')
-    }
+    
     
   }, [formData]);
 
