@@ -12,17 +12,7 @@ import PricingModel from "./components/PricingModel";
 
 const CreateLogo = () => {
   
-  const [step, setStep] = useState(() => {
-     
-      if(typeof window !== "undefined"){
-        const storedStep = localStorage.getItem("step");
-      return storedStep ? JSON.parse(storedStep) : 1;
-      }
-
-      return 1;
-    
-    
-  });
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState();
 
   const handleInputChange = (field, value) => {
