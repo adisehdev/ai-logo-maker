@@ -70,10 +70,10 @@ const GenerateLogo = () => {
 
     
 
-    else if(!userInfo || !userInfo?.email || Object.keys(userInfo).length === 0){
-      console.log("sign out generate logo page")
-      router.push('/')
-    }
+    // else if(!userInfo || !userInfo?.email || Object.keys(userInfo).length === 0){
+    //   console.log("sign out generate logo page")
+    //   router.push('/')
+    // }
 
     
 
@@ -86,6 +86,12 @@ const GenerateLogo = () => {
     if (formData?.title) {
       generateAILogo();
     }
+
+    else if(!userInfo || !userInfo?.email || Object.keys(userInfo).length === 0){
+      console.log("sign out generate logo page")
+      router.push('/')
+    }
+    
   }, [formData]);
 
   const generateAILogo = async () => {
