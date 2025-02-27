@@ -14,8 +14,12 @@ const CreateLogo = () => {
   
   const [step, setStep] = useState(() => {
      
-      const storedStep = localStorage.getItem("step");
+      if(typeof window !== "undefined"){
+        const storedStep = localStorage.getItem("step");
       return storedStep ? JSON.parse(storedStep) : 1;
+      }
+
+      return 1;
     
     
   });
